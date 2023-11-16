@@ -12,7 +12,7 @@ module.exports = class User {
     static saveUser(user) {
         return new Promise((resolve, reject) => {
             // Şifre kontrolü
-            if (user.password !== user.confirm_password) {
+            if (user.password != user.confirm_password) {
                 reject({ error: 'Şifreler eşleşmiyor' });
             }
 
@@ -33,11 +33,11 @@ module.exports = class User {
     static getUserByEmail(email) {
         return new Promise((resolve, reject) => {
             if (!email) {
-                reject({ error: "E-mail boş bırakılamazzzzzz" });
+                reject({ error: "E-mail boş bırakılamaz" });
             } else {
                 connection.query("SELECT * FROM user WHERE email = ?", [email], (error, results, fields) => {
                     if (error) {
-                        reject({ error: 'Veritabanında bir hata oluştu' }); // veya sadece reject(error); kullanabilirsiniz
+                        reject(error);
                     } else {
                         if (results.length === 0) {
                             resolve(null); // E-posta adresine sahip kullanıcı yok
@@ -49,5 +49,6 @@ module.exports = class User {
             }
         });
     }
+    
     
 };
