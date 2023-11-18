@@ -13,7 +13,7 @@ module.exports = class User {
         return new Promise((resolve, reject) => {
             // Şifre kontrolü
             if (user.password != user.confirm_password) {
-                reject({ error: 'Şifreler eşleşmiyor' });
+                reject({status: 400, error: 'Şifreler eşleşmiyor' });
             }
 
             // MySQL'e veri ekleme
@@ -21,11 +21,11 @@ module.exports = class User {
             connection.query(sql, [user.name, user.surname, user.email, user.password, user.confirm_password], (err, result) => {
                 if (err) {
                     console.error('Veritabanına ekleme hatası: ' + err.message);
-                    reject({ error: 'Kayıt sırasında bir hata oluştu' });
+                    reject({status:400, error: 'Kayıt sırasında bir hata oluştu' });
                 }
 
                 console.log('Kullanıcı başarıyla kaydedildi');
-                resolve({ success: 'Kullanıcı başarıyla kaydedildi' });
+                resolve({status:200, success: 'Kullanıcı başarıyla kaydedildi' });
             });
         });
     };
@@ -33,7 +33,7 @@ module.exports = class User {
     static getUserByEmail(email) {
         return new Promise((resolve, reject) => {
             if (!email) {
-                reject({ error: "E-mail boş bırakılamaz" });
+                reject({status: 400, error: "E-mail boş bırakılamaz" });
             } else {
                 connection.query("SELECT * FROM user WHERE email = ?", [email], (error, results, fields) => {
                     if (error) {
